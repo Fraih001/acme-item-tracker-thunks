@@ -6,6 +6,10 @@ const { STRING, INTEGER } = Sequelize;
 const User = conn.define('user', {
   name: {
     type: STRING 
+  },
+  ranking: {
+    type: INTEGER,
+    defaultValue: 5
   }
 });
 
@@ -20,11 +24,21 @@ const Thing = conn.define('thing', {
 });
 
 Thing.belongsTo(User);
+
 Thing.addHook('beforeValidate', (thing) => {
   if(!thing.userId){
     thing.userId = null;
   }
 });
+
+// Thing.addHook("beforeUpdate"), async (thing) => {
+//   const thingsOwnedByUser = await Thing.findAll({
+//     where: { userId: thing.userId }
+//   });
+//   if (thing.userId && thingsOwnedByUser.length >= 3) {
+//     throw "ERROR: A user can only own a max of 3 items"
+//   }
+// }
 
 module.exports = {
   conn,

@@ -1,7 +1,7 @@
-- move all axios calls to redux store using thunks
-- add a ranking to a User (defaults to 5)
-- display the ranking on the Users page
-- ability to increase and decrease users ranking on Users page
-- show the user with the highest ranking on the home page 
++ move all axios calls to redux store using thunks
++ add a ranking to a User (defaults to 5)
++ display the ranking on the Users page
++ ability to increase and decrease users ranking on Users page
++ show the user with the highest ranking on the home page 
 - a user can have a max of 3 things
 

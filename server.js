@@ -38,6 +38,41 @@ app.put('/api/things/:id', async(req, res, next)=> {
   }
 });
 
+// app.put('/api/user/:userId/things/:id', async(req, res, next)=> {
+//   try {
+//     const count = await Thing.count({
+//         where: {userId: req.params.userId},
+//     })
+//     if (count < 3) {
+//     console.log(count);
+
+//     const thing = await Thing.findByPk(req.params.id);
+//     await thing.update(req.body);
+//     res.send(thing);
+//     } else {
+//       // const thing = await Thing.findByPk(req.params.id);
+//       // await thing.update({ where: {
+//       //   userId: null
+//       // }});
+//       res.sendStatus(403);
+//     }
+//   }
+//   catch(ex){
+//     next(ex);
+//   }
+// });
+
+app.put('/api/users/:id', async(req, res, next)=> {
+  try {
+    const user = await User.findByPk(req.params.id);
+    await user.update(req.body);
+    res.send(user);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.delete('/api/users/:id', async(req, res, next)=> {
   try {
     const user = await User.findByPk(req.params.id);
@@ -86,7 +121,7 @@ app.use((err, req, res, next)=> {
 });
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3100;
 
 app.listen(port, ()=> console.log(`listening on port ${port}`));
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import ThingForm from './ThingForm';
 import { connect } from 'react-redux';
-import { deleteThing, updateThing } from './store';
+import { deleteThing, updateOwnerOfThing, updateThing } from './store';
 
-const Things = ({ things, users, deleteThing, increment, updateThing })=> {
+const Things = ({ things, users, deleteThing, increment, updateOwnerOfThing, updateThing })=> {
   return (
     <div>
       <h1>Things</h1>
@@ -17,12 +17,13 @@ const Things = ({ things, users, deleteThing, increment, updateThing })=> {
                 { thing.name } ({ thing.ranking })
                 owned by { user.name || 'nobody' }
                 <div>
-                  <select defaultValue={ thing.userId } onChange={ ev => updateThing(thing, ev.target.value )}>
-                    <option value=''>-- nobody --</option>
-                    {
+                  <select id='select' defaultValue={ thing.userId } onClick={()=>{ document.getElementById("select").selectedIndex = 0}} onChange={ ev => updateThing(ev.target.value, thing)}>
+                    <option>Choose An Owner</option>
+                    <option value="">nobody</option>
+                    { 
                       users.map( user => {
                         return (
-                          <option key={ user.id } value={ user.id }>{ user.name }</option>
+                          <option key={ user.id } type='reset' value={ user.id }>{ user.name }</option>
                         );
                       })
                     }
@@ -51,9 +52,18 @@ export default connect(
   },
   (dispatch)=> {
     return {
-      updateThing: (thing, userId)=> {
-        thing = {...thing, userId: userId * 1 };
-        dispatch(updateThing(thing));
+      // updateOwnerOfThing: (userId, thing) => {
+      //   if (userId) {
+      //   thing = {...thing, userId: userId * 1 };
+      //   dispatch(updateOwnerOfThing(userId, thing))
+      //   } else {
+      //   thing = {...thing, userId: null}
+      //   dispatch(updateThing(thing)); 
+      //   }
+      // },
+      updateThing: (userId, thing) => {
+        thing = {...thing, userId: userId * 1};
+        dispatch(updateThing(thing))
       },
       increment: (thing, dir)=> {
         thing = {...thing, ranking: thing.ranking + dir};
