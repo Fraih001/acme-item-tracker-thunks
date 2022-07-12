@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createUser, removeThingFromUser, updateUser } from './store';
+import { createUser, removeThingFromUser, updateUser, deleteUser } from './store';
 
 
 const Users = ({ users, createUser, deleteUser, things, removeThingFromUser, increment })=> {

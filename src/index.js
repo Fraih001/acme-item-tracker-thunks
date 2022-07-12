@@ -4,16 +4,14 @@ import Nav from './Nav';
 import Users from './Users';
 import Things from './Things';
 import Home from './Home';
-import store, { setView, loadData } from './store';
+import store, { loadData } from './store';
 import { Provider, connect } from 'react-redux';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 
 const root = createRoot(document.querySelector('#app'));
 
 class _App extends Component{
   async componentDidMount(){
-    window.addEventListener('hashchange', ()=> {
-      this.props.setView(window.location.hash.slice(1));
-    });
     try {
       this.props.loadData();
     }
@@ -22,46 +20,31 @@ class _App extends Component{
     }
   }
   render(){
-    const { view } = this.props;
     return (
-      <div>
-        <Nav />
-        {
-          view === '' ? <Home /> : null
-        }
-        {
-          view === 'users' ? <Users /> : null
-        }
-        {
-          view === 'things' ? <Things /> : null
-        }
-      </div>
+        <div>
+        <Nav/>
+
+          <Routes>
+              <Route element ={ <Home/> } path='/' exact />
+              <Route element={ <Things/> } path='/things' exact/>
+              <Route element ={ <Users/> } path='/users' exact/>
+          </Routes>
+        </div>
     );
   }
 }
-
-
 const mapDispatch = (dispatch)=> {
   return {
-    setView: (view)=> {
-      dispatch(setView(view));
-    },
     loadData: ()=> {
       dispatch(loadData())
-  }
-}
+  }}
 }
 
-const mapStateToProps = state => {
-  return {
-    view: state.view
-  };
-};
+const mapStateToProps = (state) => state;
 
 const App = connect(mapStateToProps, mapDispatch)(_App);
 
-
-root.render(<Provider store={ store }><App /></Provider>);
+root.render(<Router><Provider store={ store }><App/></Provider></Router>);
 /*
 const root = document.querySelector('#app');
 render(React.createElement('hr'), root);

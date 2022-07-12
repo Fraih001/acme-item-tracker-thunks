@@ -1,21 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 
+const Nav = ( props )=> {
+  const location = useLocation();
+  const { things, users } = props
+  console.log(props)
 
-
-
-const Nav = ({ users, things, view })=> {
   return (
     <nav>
-      <a href='#' className={ view === '' ? 'selected': ''}>Home</a>
-      <a href='#things' className={ view === 'things' ? 'selected': ''}>Things ({ things.length })</a>
-      <a href='#users' className={ view === 'users' ? 'selected': ''}>Users ({ users.length })</a>
+      <Link to='/' className={ location.pathname === '/' ? 'selected': ''}>Home</Link>
+      <Link to='/things' className={ location.pathname === '/things' ? 'selected': ''}>Things ({ things.length })</Link>
+      <Link to='/users' className={ location.pathname === '/users' ? 'selected': ''}>Users ({ users.length })</Link>
     </nav>
   );
 }
 
-const mapStateToProps = (state)=> {
-  return state;
-};
-
-export default connect(mapStateToProps)(Nav);
+export default connect(state=>state)(Nav);

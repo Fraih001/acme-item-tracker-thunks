@@ -4,19 +4,6 @@ import thunk from 'redux-thunk';
 import axios from 'axios';
 import { faker } from '@faker-js/faker'
 
-// const initialState = {
-//   view: window.location.hash.slice(1),
-//   users: [],
-//   things: []
-// };
-
-const viewReducer = (state =window.location.hash.slice(1), action)=> { 
-  if(action.type === 'SET_VIEW'){
-    return action.view;
-  }
-  return state;
-};
-
 const usersReducer = (state = [], action)=> { 
   if(action.type === 'DELETE_USER'){
     return state.filter(user => user.id !== action.user.id )
@@ -60,14 +47,7 @@ const thingsReducer = (state = [], action)=> {
 const reducer = combineReducers({
   users: usersReducer,
   things: thingsReducer,
-  view: viewReducer
 });
-
-const setView = (view) => {
-  return async(dispatch) => {
-    dispatch({ type: 'SET_VIEW', view });
-  }
-}
 
 const loadData = () => {
   return async(dispatch) => {
@@ -94,20 +74,12 @@ const createThing = () => {
   }
 }
 
-// const updateThing = (thing)=> {
-//   return async(dispatch)=> {
-//     thing = (await axios.put(`/api/things/${thing.id}`, thing)).data;
-//     dispatch({ type: 'UPDATE_THING', thing });
-//   };
-// };
-
 const updateThing = (thing)=> {
   return async(dispatch, getState)=> {
-    if((getState().things.filter(_thing => thing.userId === _thing.userId)).length > 2){
+    if((getState().things.filter(_thing => thing.userId === _thing.userId && _thing.userId !== null)).length > 2){
       alert('THIS IS AN ALERT. A USER CAN ONLY OWN THREE THINGS.');
-      document.getElementById("select").selectedIndex = 0;
       return
-    }else{
+    } else {
     thing = (await axios.put(`/api/things/${thing.id}`, thing)).data;
     dispatch({ type: 'UPDATE_THING', thing });
   }};
@@ -153,10 +125,10 @@ const updateUser = (user)=> {
   };
 };
 
-const deleteUser = (userId) => {
+const deleteUser = (user) => {
   return async(dispatch) => {
-    await axios.delete(`/api/users/${userId}`)
-    dispatch({ type: 'DELETE_USER', userId })
+    await axios.delete(`/api/users/${user.id}`)
+    dispatch({ type: 'DELETE_USER', user })
   }
 }
 
@@ -171,7 +143,7 @@ const removeThingFromUser = (thing) => {
 
 const store = createStore(reducer, applyMiddleware(logger, thunk));
 
-export { deleteThing, updateThing, deleteUser, createUser, removeThingFromUser, createThing, setView, loadData, updateUser };
+export { deleteThing, updateThing, deleteUser, createUser, removeThingFromUser, createThing, loadData, updateUser };
 
 export default store;
 
